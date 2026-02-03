@@ -1,0 +1,74 @@
+event-types.txt: documents all event types and associated variables in the mjai protocol
+
+"ankan": a player calls a concealed quad
+    actor (int): the player making the call
+    pai (str): which tile the player has four of
+    consumed (list[str]): the four tiles being revealed
+
+"chi": a player makes a call to complete a sequence from an opponent's discard
+    actor (int): the player who takes the tile
+    target (int): the player who discarded the tile
+    pai (str): the discarded tile
+    consumed (list[str]): the two other tiles needed to complete the sequence
+
+"dahai": a player discards one of their tiles
+    actor (int): the player who discards the tile
+    pai (str): the tile the player discards
+    tsumogiri (bool): true if and only if the player discards the tile they just drew
+
+"daiminkan": a player calls an open quad
+    actor (int): the player making the call
+    pai (str): which tile the player is taking
+    consumed (list[str]): the existing three tiles being revealed
+
+"dora": a new dora tile is revealed
+    dora_marker (str): the tile revealed in the dead wall
+
+"end_game": all rounds have been completed
+
+"end_kyoku": an individual round has been completed
+
+"hora": a player declares a win in the current round
+    actor (int): the player who achieves the winning hand
+    target (int): the player who drew the winning tile
+    deltas (list[int]): score changes for each of the four players
+    ura_markers (list[str]): tiles that appear as ura markers
+
+"kakan": a player calls an added quad
+    actor (int): the player making the call
+    pai (str): the added tile
+    consumed (list[str]): the existing open triplet
+
+"pon": a player makes a call to complete a triplet from an opponent's discard
+    actor (int): the player who takes the tile
+    target (int): the player who discarded the tile
+    pai (str): the discarded tile
+    consumed (list[str]): the two other tiles needed to complete the triplet
+
+"reach": a player declares riichi
+    actor (int): the player who declares riichi
+
+"reach_accepted": a player who has declared riichi does not lose off of their discard, and places riichi stick
+    actor (int): the player who places the 1,000 point riichi bet
+
+"ryukyoku": an exhaustive draw occurs
+    deltas (list[int]): score changes for each of the four players
+
+"start_game": the beginning of the game
+    names (list[str]): the players in the game
+    kyoku_first (int): always 0
+    aka_flag (bool): always true
+
+"start_kyoku": the beginning of a round
+    bakaze (str): the round wind
+    dora_marker (str): the tile initially revealed in the dead wall
+    kyoku (int): the round number, ranging from 1 to 4
+    honba (int): the repeat counter
+    kyotaku (int): riichi sticks left over from the previous round
+    oya (int): the dealer position, always one less than kyoku
+    scores (list[int]): the current scores of each player
+    tehais (list[list[str]]): starting hand of 13 tiles for each of the four players
+
+"tsumo": a player draws a tile
+    actor (int): the player who drew the tile
+    pai (str): the tile drawn by the player
