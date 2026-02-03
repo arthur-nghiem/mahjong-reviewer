@@ -106,7 +106,7 @@ Please refer to the appropriate section depending on your use case.
 
 To run the reviewer on the sample game included in this repository, enter the following: 
    ```sh
-    python -m mahjong_reviewer 
+   python -m mahjong_reviewer 
    ```
 
 You will find the generated game review at `output/sample_game/game_review.html`. 
