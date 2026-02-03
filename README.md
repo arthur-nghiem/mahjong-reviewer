@@ -41,14 +41,6 @@
             <li><a href="#i-would-like-to-try-retraining-the-model">I would like to try retraining the model.</a></li>
         </ul>
     </li>
-    <li>
-      <a href="#performance-metrics">Performance Metrics</a>
-      <ul>
-        <li><a href="#model-accuracy">Model Accuracy</a></li>
-        <li><a href="#processing-speed">Processing Speed</a></li>
-        <li><a href="#requirements">Requirements</a></li>
-      </ul>
-    </li>
     <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
   </ol>
