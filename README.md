@@ -9,7 +9,7 @@
 
 <div align="center">
 
-![Python Version](https://img.shields.io/badge/python-3.13-blue)
+![Python Version](https://img.shields.io/badge/python-3.12-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 ![Code Style](https://img.shields.io/badge/code%20style-black-000000.svg)
 
@@ -73,7 +73,7 @@ Follow these steps to obtain a local copy of the project.
 
 ### Prerequisites
 
-Install Python version 3.13 from [python.org](python.org). I also recommend setting up a virtual environment using miniconda.
+Install Python version 3.12 from [python.org](python.org). I also recommend setting up a virtual environment using miniconda.
 
 ### Installation
 
