@@ -129,23 +129,18 @@ You will find the generated game review at `output/converted_game/game_review.ht
 
 ### I would like to try retraining the model. 
 
-1. The archive and raw data directories are not included in this repository due to size limitations. Install `archive` from [this Kaggle dataset](https://www.kaggle.com/datasets/shokanekolouis/tenhou-to-mjai) and place it in your `mahjong-reviewer` directory.
+1. The raw data is not included in this repository due to size limitations. Install `data.zip` from [this Hugging Face dataset](https://huggingface.co/datasets/ampy-b/mahjong/blob/main/data.zip) and use it to replace your existing `mahjong-reviewer/data` directory.
 
-2. To decompress the `archive` into `data`, run `decompress.py`:
+2. To generate data for machine learning, run `generator.py`:
     ```sh
-    python -m src.mahjong_reviewer.scripts.decompress 
-   ```
-
-3. To generate data for machine learning, run `generator.py`:
-    ```sh
-    python -m src.mahjong_reviewer.data.generator
+    python -m mahjong_reviewer.data.generator
     ```
 
-4. To train the model, run `trainer.py`:
+3. To train the model, run `trainer.py`:
     ```sh
-    python -m src.mahjong_reviewer.models.trainer
+    python -m mahjong_reviewer.models.trainer
     ```
-5. To test the retrained model on the sample game, run `__main__.py`: 
+4. To test the retrained model on the sample game, run `__main__.py`: 
     ```sh
     python -m mahjong_reviewer 
     ```
