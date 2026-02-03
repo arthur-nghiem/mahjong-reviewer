@@ -9,7 +9,7 @@
 
 <div align="center">
 
-![Python Version](https://img.shields.io/badge/python-3.9%20%7C%203.10%20%7C%203.11%20%7C%203.12-blue)
+![Python Version](https://img.shields.io/badge/python-3.13-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 ![Code Style](https://img.shields.io/badge/code%20style-black-000000.svg)
 
