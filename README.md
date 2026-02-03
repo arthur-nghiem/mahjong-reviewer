@@ -81,7 +81,11 @@ Install Python version 3.12 from [python.org](python.org). I also recommend sett
    ```sh
    git clone https://github.com/arthur-nghiem/mahjong-reviewer.git
    ```
-2. Navigate to your local copy and install all dependencies: 
+2. Navigate to your local copy.
+   ```sh
+   cd mahjong-reviewer
+   ```
+3. Install all dependencies. 
    ```sh
    pip install .
    ```
@@ -120,7 +124,7 @@ Alternatively, you can access `docs/example-output.html` to view this example wi
 
 5. Place `converted_game.jsonl` in your `mahjong-reviewer/input` directory.
 
-6. Enter the following command, replacing `your_username` with your actual Mahjong Soul username: 
+6. Enter the following command, replacing `your_username` with your actual Mahjong Soul username. 
     ```sh
     python -m mahjong_reviewer converted_game.jsonl -u your_username
     ```
@@ -131,16 +135,16 @@ You will find the generated game review at `output/converted_game/game_review.ht
 
 1. The raw data is not included in this repository due to size limitations. Install `data.zip` from [this Hugging Face dataset](https://huggingface.co/datasets/ampy-b/mahjong/blob/main/data.zip) and use it to replace your existing `mahjong-reviewer/data` directory.
 
-2. To generate data for machine learning, run `generator.py`:
+2. To generate data for machine learning, run `generator.py`.
     ```sh
     python -m mahjong_reviewer.data.generator
     ```
 
-3. To train the model, run `trainer.py`:
+3. To train the model, run `trainer.py`.
     ```sh
     python -m mahjong_reviewer.models.trainer
     ```
-4. To test the retrained model on the sample game, run `__main__.py`: 
+4. To test the retrained model on the sample game, run `__main__.py`.
     ```sh
     python -m mahjong_reviewer 
     ```
