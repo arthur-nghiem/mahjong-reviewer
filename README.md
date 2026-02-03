@@ -130,7 +130,7 @@ Alternatively, you can access `docs/example-output.html` to view this example wi
 
 6. Enter the following command, replacing `your_username` with your actual Mahjong Soul username: 
     ```sh
-    python -m src.mahjong_reviewer converted_game.jsonl -u your_username
+    python -m mahjong_reviewer converted_game.jsonl -u your_username
     ```
 
 You will find the generated game review at `output/converted_game/game_review.html`.
