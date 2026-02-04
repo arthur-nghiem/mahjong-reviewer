@@ -133,18 +133,21 @@ You will find the generated game review at `output/converted_game/game_review.ht
 
 ### I would like to try retraining the model. 
 
-1. The raw data is not included in this repository due to size limitations. Install `data.zip` from [this Hugging Face dataset](https://huggingface.co/datasets/ampy-b/mahjong/blob/main/data.zip) and use it to replace your existing `mahjong-reviewer/data` directory.
+1. The raw data is not included in this repository due to size limitations. Install `data.zip` from Hugging Face using the following command, then eplace your existing `mahjong-reviewer/data` directory with your newly downloaded `data` folder.
+   ```sh
+    wget https://huggingface.co/datasets/ampy-b/mahjong/resolve/main/data.zip
+    ```
 
-2. To generate data for machine learning, run `generator.py`.
+3. To generate data for machine learning, run `generator.py`.
     ```sh
     python -m mahjong_reviewer.data.generator
     ```
 
-3. To train the model, run `trainer.py`.
+4. To train the model, run `trainer.py`.
     ```sh
     python -m mahjong_reviewer.models.trainer
     ```
-4. To test the retrained model on the sample game, run `__main__.py`.
+5. To test the retrained model on the sample game, run `__main__.py`.
     ```sh
     python -m mahjong_reviewer 
     ```
