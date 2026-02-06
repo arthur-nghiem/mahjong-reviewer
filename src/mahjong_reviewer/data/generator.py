@@ -90,7 +90,7 @@ if __name__ == "__main__":
     split_idx = round(config.SAMPLE_SIZE * config.TRAIN_TEST_SPLIT)
 
     logger.info("Generating training dataset...")
-    generate_dataset(sample_logs[:split_idx], "cnn_train.pt", 5)
+    generate_dataset(sample_logs[:split_idx], "cnn_train.pt", config.NUM_WORKERS)
     logger.info("Generating test dataset...")
-    generate_dataset(sample_logs[split_idx:], "cnn_test.pt", 5)
+    generate_dataset(sample_logs[split_idx:], "cnn_test.pt", config.NUM_WORKERS)
     logger.info("Data generation complete!")
