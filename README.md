@@ -61,7 +61,7 @@ This application analyzes your riichi mahjong game log, producing an html game r
 
 <div align="center">
   <img src="docs/img/game_review_screenshot.png" alt="Game Review Example" width="700"/>
-  <p><em>Example of AI-powered game analysis with move explanations</em></p>
+  <p><em>Example of AI-powered move analysis</em></p>
 </div>
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
