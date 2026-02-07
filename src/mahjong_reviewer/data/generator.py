@@ -86,11 +86,37 @@ if __name__ == "__main__":
     logger.info("Finding log files...")
     all_logs = [log for log in data_dir.glob("*/*") if log.is_file()]
     logger.info(f"Found {len(all_logs)} total games")
-    sample_logs = random.sample(all_logs, config.SAMPLE_SIZE)
-    split_idx = round(config.SAMPLE_SIZE * config.TRAIN_TEST_SPLIT)
 
-    logger.info("Generating training dataset...")
-    generate_dataset(sample_logs[:split_idx], "cnn_train.pt", config.NUM_WORKERS)
-    logger.info("Generating test dataset...")
-    generate_dataset(sample_logs[split_idx:], "cnn_test.pt", config.NUM_WORKERS)
+    sample_logs = random.sample(all_logs, config.SAMPLE_SIZE)
+
+    if config.LAZY_LOADING:
+        assert config.SAMPLE_SIZE % config.DATASET_SIZE == 0
+        num_datasets = int(config.SAMPLE_SIZE / config.DATASET_SIZE)
+        split_idxs = [i * config.DATASET_SIZE for i in range(num_datasets + 1)]
+        num_train_datasets = round(num_datasets * config.TRAIN_TEST_SPLIT)
+        num_test_datasets = num_datasets - num_train_datasets
+
+        for i in range(num_train_datasets):
+            logger.info(f"Generating training dataset {i}...")
+            generate_dataset(
+                sample_logs[split_idxs[i] : split_idxs[i + 1]],
+                f"cnn_train{i}.pt",
+                config.NUM_WORKERS,
+            )
+        for i in range(num_test_datasets):
+            logger.info(f"Generating test dataset {i}...")
+            j = i + num_train_datasets
+            generate_dataset(
+                sample_logs[split_idxs[j] : split_idxs[j + 1]],
+                f"cnn_test{i}.pt",
+                config.NUM_WORKERS,
+            )
+
+    else:
+        split_idx = round(config.SAMPLE_SIZE * config.TRAIN_TEST_SPLIT)
+        logger.info("Generating training dataset...")
+        generate_dataset(sample_logs[:split_idx], "cnn_train.pt", config.NUM_WORKERS)
+        logger.info("Generating test dataset...")
+        generate_dataset(sample_logs[split_idx:], "cnn_test.pt", config.NUM_WORKERS)
+
     logger.info("Data generation complete!")
