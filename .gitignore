@@ -47,3 +47,4 @@ data/raw/2022/*.jsonl
 data/raw/2023/*.jsonl
 data/raw/2024/*.jsonl
 private/
+output/
