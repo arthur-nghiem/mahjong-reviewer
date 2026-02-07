@@ -28,6 +28,7 @@ def load_data(data_paths: list[Path], batch_size: int = 256, shuffle: bool = Tru
     X = torch.zeros(0, 1, config.INPUT_ROWS, constants.TILE_TYPES)
     y = torch.zeros(0)
     for data_path in data_paths:
+        logger.info(f"Loading data path: {data_path.name}")
         data = torch.load(data_path)
         X = torch.cat((X, data["predictors"].to(dtype=torch.float32)), 0)
         y = torch.cat((y, data["response"].to(dtype=torch.long)), 0)
@@ -55,7 +56,6 @@ class LazyDataLoader:
 
     def __iter__(self):
         for chunk_path in self.chunk_paths:
-            logger.info(f"Loading chunk: {chunk_path.name}")
             chunk_loader = load_data([chunk_path], self.batch_size, self.shuffle)
             for batch in chunk_loader:
                 yield batch
