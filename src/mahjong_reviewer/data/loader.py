@@ -26,7 +26,7 @@ def load_data(data_paths: list[Path], batch_size: int = 256, shuffle: bool = Tru
 
     config = Config()
     X = torch.zeros(0, 1, config.INPUT_ROWS, constants.TILE_TYPES)
-    y = torch.zeros(0)
+    y = torch.zeros(0, dtype=torch.long)
     for data_path in data_paths:
         logger.info(f"Loading data path: {data_path.name}")
         data = torch.load(data_path)
