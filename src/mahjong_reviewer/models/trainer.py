@@ -5,6 +5,7 @@ trainer.py: Train a machine learning model on historical game data.
 from config.config import Config
 import logging
 from mahjong_reviewer.data import loader
+from mahjong_reviewer.data.loader import LazyDataLoader
 from mahjong_reviewer.models import learner
 from pathlib import Path
 import torch
@@ -15,6 +16,7 @@ from typing import Union
 
 logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
 logger = logging.getLogger(__name__)
+
 
 class ModelTrainer:
     def __init__(self):
@@ -62,12 +64,12 @@ class ModelTrainer:
             train_loader: Union[LazyDataLoader, DataLoader] = loader.LazyDataLoader(
                 train_chunks, self.batch_size, shuffle=True
             )
-            test_loader: Union[ChunkedDataLoader, DataLoader] = loader.LazyDataLoader(
+            test_loader: Union[LazyDataLoader, DataLoader] = loader.LazyDataLoader(
                 test_chunks, self.batch_size, shuffle=False
             )
         else:
-            train_loader = loader.load_data_eager(train_chunks, self.batch_size, True)
-            test_loader = loader.load_data_eager(test_chunks, self.batch_size, False)
+            train_loader = loader.load_data(train_chunks, self.batch_size, True)
+            test_loader = loader.load_data(test_chunks, self.batch_size, False)
 
         model = learner.DiscardLearner().to(device)
         criterion = nn.CrossEntropyLoss()

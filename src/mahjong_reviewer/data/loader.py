@@ -3,13 +3,18 @@ loader.py: Load .pt game data into memory.
 """
 
 from config import constants
+from config.config import Config
+import logging
 from pathlib import Path
 import torch
 from torch.utils.data import DataLoader
 from torch.utils.data import TensorDataset
 
+logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
+logger = logging.getLogger(__name__)
 
-def load_data_eager(data_paths: list[Path], batch_size: int = 256, shuffle: bool = True) -> DataLoader:
+
+def load_data(data_paths: list[Path], batch_size: int = 256, shuffle: bool = True) -> DataLoader:
     """
     Load .pt game data into memory.
 
@@ -19,15 +24,17 @@ def load_data_eager(data_paths: list[Path], batch_size: int = 256, shuffle: bool
         shuffle: Whether or not to shuffle the order of the data.
     """
 
-    X = torch.zeros(0, 1, constants.INPUT_ROWS, constants.TILE_TYPES)
+    config = Config()
+    X = torch.zeros(0, 1, config.INPUT_ROWS, constants.TILE_TYPES)
     y = torch.zeros(0)
     for data_path in data_paths:
-        data = torch.load(data_paths)
+        data = torch.load(data_path)
         X = torch.cat((X, data["predictors"].to(dtype=torch.float32)), 0)
         y = torch.cat((y, data["response"].to(dtype=torch.long)), 0)
     dataset = TensorDataset(X, y)
     data_loader = DataLoader(dataset, batch_size=batch_size, shuffle=shuffle)
     return data_loader
+
 
 class LazyDataLoader:
     """
@@ -49,7 +56,7 @@ class LazyDataLoader:
     def __iter__(self):
         for chunk_path in self.chunk_paths:
             logger.info(f"Loading chunk: {chunk_path.name}")
-            chunk_loader = loader.load_data(chunk_path, self.batch_size, self.shuffle)
+            chunk_loader = load_data([chunk_path], self.batch_size, self.shuffle)
             for batch in chunk_loader:
                 yield batch
             del chunk_loader

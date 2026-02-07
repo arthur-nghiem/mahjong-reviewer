@@ -90,9 +90,9 @@ if __name__ == "__main__":
     sample_logs = random.sample(all_logs, config.SAMPLE_SIZE)
 
     if config.CHUNK_DATASET:
-        assert config.SAMPLE_SIZE % config.DATASET_SIZE == 0
-        num_datasets = int(config.SAMPLE_SIZE / config.DATASET_SIZE)
-        split_idxs = [i * config.DATASET_SIZE for i in range(num_datasets + 1)]
+        assert config.SAMPLE_SIZE % config.CHUNK_SIZE == 0
+        num_datasets = int(config.SAMPLE_SIZE / config.CHUNK_SIZE)
+        split_idxs = [i * config.CHUNK_SIZE for i in range(num_datasets + 1)]
         num_train_datasets = round(num_datasets * config.TRAIN_TEST_SPLIT)
         num_test_datasets = num_datasets - num_train_datasets
 
