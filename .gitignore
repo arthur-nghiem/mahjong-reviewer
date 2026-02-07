@@ -40,6 +40,7 @@ env/
 # Project specific
 archive/
 data/processed/*.pt
+data/processed/obtain.py
 data/raw/2020/*.jsonl
 data/raw/2021/*.jsonl
 data/raw/2022/*.jsonl
