@@ -53,7 +53,7 @@ This application analyzes your riichi mahjong game log, producing an html game r
 
 ### Features
 
-- 🎯 **AI-Powered Analysis**: Neural network trained on 1,000 games
+- 🎯 **AI-Powered Analysis**: Neural network trained on 10,000 games
 - 📊 **Visual Game Replay**: Interactive HTML review with tile graphics
 - 🎮 **Mahjong Soul Support**: Import games from Mahjong Soul
 
