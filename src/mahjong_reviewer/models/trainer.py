@@ -16,33 +16,6 @@ from typing import Union
 logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
 logger = logging.getLogger(__name__)
 
-
-class ChunkedDataLoader:
-    """
-    Lazy loader for datasets split across multiple .pt files.
-    """
-
-    def __init__(self, chunk_paths: list[Path], batch_size: int, shuffle: bool = True):
-        """
-        Args:
-            chunk_paths: The list of paths to .pt files.
-            batch_size: The batch size for training.
-            shuffle: Whether to shuffle data within each chunk.
-        """
-        self.chunk_paths = sorted(chunk_paths)
-        self.batch_size = batch_size
-        self.shuffle = shuffle
-        logger.info(f"Initialized ChunkedDataLoader with {len(self.chunk_paths)} chunks")
-
-    def __iter__(self):
-        for chunk_path in self.chunk_paths:
-            logger.info(f"Loading chunk: {chunk_path.name}")
-            chunk_loader = loader.load_data(chunk_path, self.batch_size, self.shuffle)
-            for batch in chunk_loader:
-                yield batch
-            del chunk_loader
-
-
 class ModelTrainer:
     def __init__(self):
         self.best_test_accuracy = 0.0
@@ -83,18 +56,18 @@ class ModelTrainer:
             device = torch.device("cuda")
         logger.info(f"Using device: {device}")
 
+        train_chunks = self.get_chunk_paths("cnn_train")
+        test_chunks = self.get_chunk_paths("cnn_test")
         if self.lazy_loading:
-            train_chunks = self.get_chunk_paths("cnn_train")
-            test_chunks = self.get_chunk_paths("cnn_test")
-            train_loader: Union[ChunkedDataLoader, DataLoader] = ChunkedDataLoader(
+            train_loader: Union[LazyDataLoader, DataLoader] = loader.LazyDataLoader(
                 train_chunks, self.batch_size, shuffle=True
             )
-            test_loader: Union[ChunkedDataLoader, DataLoader] = ChunkedDataLoader(
+            test_loader: Union[ChunkedDataLoader, DataLoader] = loader.LazyDataLoader(
                 test_chunks, self.batch_size, shuffle=False
             )
         else:
-            train_loader = loader.load_data(self.input_dir / "cnn_train.pt", self.batch_size, True)
-            test_loader = loader.load_data(self.input_dir / "cnn_test.pt", self.batch_size, False)
+            train_loader = loader.load_data_eager(train_chunks, self.batch_size, True)
+            test_loader = loader.load_data_eager(test_chunks, self.batch_size, False)
 
         model = learner.DiscardLearner().to(device)
         criterion = nn.CrossEntropyLoss()

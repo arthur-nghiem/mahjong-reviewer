@@ -15,6 +15,7 @@ class Config:
 
     BASE_LR = 0.0001
     BATCH_SIZE = 256
+    CHUNK_DATASET = True
     DATASET_SIZE = 1000
     DROPOUT_RATE = 0.25 
     INPUT_ROWS = 254

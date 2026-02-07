@@ -89,7 +89,7 @@ if __name__ == "__main__":
 
     sample_logs = random.sample(all_logs, config.SAMPLE_SIZE)
 
-    if config.LAZY_LOADING:
+    if config.CHUNK_DATASET:
         assert config.SAMPLE_SIZE % config.DATASET_SIZE == 0
         num_datasets = int(config.SAMPLE_SIZE / config.DATASET_SIZE)
         split_idxs = [i * config.DATASET_SIZE for i in range(num_datasets + 1)]
