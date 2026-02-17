@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mahjong Reviewer API</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            max-width: 600px; 
+            margin: 50px auto; 
+            padding: 0 20px;
+            color: #333;
+        }
+        h1 { color: #2c3e50; }
+        .hero { 
+            text-align: center; 
+            margin-bottom: 40px;
+        }
+        .hero p {
+            font-size: 16px;
+            color: #666;
+        }
+        .demo-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 12px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .demo-section h2 {
+            margin-top: 0;
+            font-size: 24px;
+        }
+        .demo-section p {
+            opacity: 0.9;
+            margin-bottom: 20px;
+        }
+        .upload-form { 
+            border: 2px dashed #ccc; 
+            padding: 30px; 
+            border-radius: 8px;
+            background: #f9f9f9;
+        }
+        .upload-form h3 {
+            margin-top: 0;
+            color: #555;
+        }
+        input[type="file"], input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button { 
+            padding: 12px 24px; 
+            border: none; 
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+            font-weight: 600;
+        }
+        .btn-primary {
+            background: #007bff;
+            color: white;
+        }
+        .btn-primary:hover { background: #0056b3; }
+        .btn-demo {
+            background: white;
+            color: #667eea;
+        }
+        .btn-demo:hover { background: #f0f0f0; }
+        button:disabled { 
+            background: #ccc; 
+            cursor: not-allowed; 
+        }
+        #status { 
+            margin-top: 20px; 
+            padding: 10px; 
+            border-radius: 4px;
+        }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        .info { background: #d1ecf1; color: #0c5460; }
+        .tech-stack {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f0f0f0;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+        .tech-stack h3 { margin-top: 0; }
+        .divider {
+            text-align: center;
+            margin: 30px 0;
+            color: #999;
+            position: relative;
+        }
+        .divider::before,
+        .divider::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            width: 45%;
+            height: 1px;
+            background: #ddd;
+        }
+        .divider::before { left: 0; }
+        .divider::after { right: 0; }
+    </style>
+</head>
+<body>
+    <div class="hero">
+        <h1>🀄 Mahjong Reviewer</h1>
+        <p>AI-powered Riichi Mahjong game analysis</p>
+        <p style="font-size: 14px; color: #999;">PyTorch CNN • 84% top-3 accuracy • 10,000 games</p>
+    </div>
+    
+    <div class="demo-section">
+        <h2>Try the Demo</h2>
+        <p>View the AI-analyzed review of a sample game.</p>
+        <button class="btn-demo" id="demoBtn" onclick="runDemo()">
+            Generate Demo Review
+        </button>
+    </div>
+
+    <div class="divider">OR</div>
+    
+    <div class="upload-form">
+        <h3>Upload Your Own Game</h3>
+        <form id="reviewForm">
+            <label for="logFile"><strong>Game Log (.jsonl)</strong></label>
+            <input type="file" id="logFile" name="log_file" accept=".jsonl" required>
+            
+            <label for="username"><strong>Your Username</strong></label>
+            <input type="text" id="username" name="username" placeholder="e.g., ampy" required>
+            
+            <button type="submit" class="btn-primary" id="submitBtn">Generate Review</button>
+        </form>
+        <div id="status"></div>
+    </div>
+
+    <div class="tech-stack">
+        <h3>Tech Stack</h3>
+        <p><strong>ML:</strong> PyTorch CNN • 254×34 input tensor • 500K training samples</p>
+        <p><strong>Backend:</strong> FastAPI • Docker • Python 3.12</p>
+        <p><strong>Infrastructure:</strong> AWS ECS (Fargate) • S3 • CloudWatch</p>
+        <p><strong>Source:</strong> <a href="https://github.com/arthur-nghiem/mahjong-reviewer" target="_blank">GitHub</a></p>
+    </div>
+
+    <script>
+        const form = document.getElementById('reviewForm');
+        const statusDiv = document.getElementById('status');
+        const submitBtn = document.getElementById('submitBtn');
+        const demoBtn = document.getElementById('demoBtn');
+
+        async function runDemo() {
+            statusDiv.className = 'info';
+            statusDiv.textContent = '⏳ Generating demo review... This takes ~35 seconds.';
+            demoBtn.disabled = true;
+            demoBtn.textContent = 'Processing...';
+            
+            try {
+                const response = await fetch('/demo', { method: 'POST' });
+                
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.detail || 'Demo generation failed');
+                }
+                
+                const blob = await response.blob();
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'mahjong-demo-review.zip';
+                a.click();
+                URL.revokeObjectURL(url);
+                
+                statusDiv.className = 'success';
+                statusDiv.textContent = '✅ Demo downloaded! Check your downloads folder.';
+            } catch (error) {
+                statusDiv.className = 'error';
+                statusDiv.textContent = '❌ Error: ' + error.message;
+            } finally {
+                demoBtn.disabled = false;
+                demoBtn.textContent = '🎮 Generate Demo Review';
+            }
+        }
+
+        form.onsubmit = async (e) => {
+            e.preventDefault();
+            
+            statusDiv.className = 'info';
+            statusDiv.textContent = '⏳ Processing your game... This takes ~35 seconds.';
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Processing...';
+            
+            try {
+                const formData = new FormData(e.target);
+                const response = await fetch('/review', { 
+                    method: 'POST', 
+                    body: formData 
+                });
+                
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.detail || 'Review generation failed');
+                }
+                
+                const blob = await response.blob();
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'mahjong-review.zip';
+                a.click();
+                URL.revokeObjectURL(url);
+                
+                statusDiv.className = 'success';
+                statusDiv.textContent = '✅ Review downloaded! Check your downloads folder.';
+            } catch (error) {
+                statusDiv.className = 'error';
+                statusDiv.textContent = '❌ Error: ' + error.message;
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Generate Review';
+            }
+        };
+    </script>
+</body>
+</html>

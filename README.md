@@ -9,9 +9,11 @@
 
 <div align="center">
 
-![Python Version](https://img.shields.io/badge/python-3.12-blue)
-![License](https://img.shields.io/badge/license-MIT-green)
-![Code Style](https://img.shields.io/badge/code%20style-black-000000.svg)
+[![Python 3.12](https://img.shields.io/badge/python-3.12-blue.svg)](https://www.python.org/downloads/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.100-green.svg)](https://fastapi.tiangolo.com/)
+[![Docker](https://img.shields.io/badge/Docker-ready-blue.svg)](https://www.docker.com/)
+[![AWS ECS](https://img.shields.io/badge/AWS-ECS-orange.svg)](https://aws.amazon.com/ecs/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 </div>
 
@@ -23,6 +25,7 @@
       <a href="#about-the-project">About The Project</a>
       <ul>
             <li><a href="#features">Features</a></li>
+            <li><a href="#livedemo">Live Demo</a></li>
             <li><a href="#screenshots">Screenshots</a></li>
         </ul>
     </li>
@@ -57,10 +60,21 @@ This application analyzes your riichi mahjong game log, producing an html game r
 - 📊 **Visual Game Replay**: Interactive HTML review with tile graphics
 - 🎮 **Mahjong Soul Support**: Import games from Mahjong Soul
 
+### Live Demo
+**Try it now:** https://mahjong-reviewer.com
+
+Upload a Mahjong Soul `.jsonl` game log or click "Try Demo" to see AI analysis in action.
+
+**Tech Stack:** PyTorch • FastAPI • Docker • AWS (ECS/ALB/S3/ACM)
+
 ### Screenshots
+<div align="center">
+  <img src="docs/img/frontend-screenshot.png" alt="Application front-end" width="350"/>
+  <p><em>Front-end web interface to submit a game log for analysis</em></p>
+</div>
 
 <div align="center">
-  <img src="docs/img/game_review_screenshot.png" alt="Game Review Example" width="700"/>
+  <img src="docs/img/game_review_screenshot.png" alt="Game Review Example" width="500"/>
   <p><em>Example of AI-powered move analysis</em></p>
 </div>
 
