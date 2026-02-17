@@ -160,7 +160,7 @@
 
         async function runDemo() {
             statusDiv.className = 'info';
-            statusDiv.textContent = '⏳ Generating demo review... This takes ~35 seconds.';
+            statusDiv.textContent = '⏳ Generating demo review...';
             demoBtn.disabled = true;
             demoBtn.textContent = 'Processing...';
             
@@ -187,7 +187,7 @@
                 statusDiv.textContent = '❌ Error: ' + error.message;
             } finally {
                 demoBtn.disabled = false;
-                demoBtn.textContent = '🎮 Generate Demo Review';
+                demoBtn.textContent = 'Generate Demo Review';
             }
         }
 
@@ -195,7 +195,7 @@
             e.preventDefault();
             
             statusDiv.className = 'info';
-            statusDiv.textContent = '⏳ Processing your game... This takes ~35 seconds.';
+            statusDiv.textContent = '⏳ Processing your game...';
             submitBtn.disabled = true;
             submitBtn.textContent = 'Processing...';
             
