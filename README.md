@@ -63,7 +63,7 @@ This application analyzes your riichi mahjong game log, producing an html game r
 ### Live Demo
 **Try it now:** https://mahjong-reviewer.com
 
-Upload a Mahjong Soul `.jsonl` game log or click "Try Demo" to see AI analysis in action.
+Click "Try Demo" or upload a Mahjong Soul `.jsonl` game log to see AI analysis in action.
 
 **Tech Stack:** PyTorch • FastAPI • Docker • AWS (ECS/ALB/S3/ACM)
 
