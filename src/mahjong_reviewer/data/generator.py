@@ -1,5 +1,5 @@
 """
-generator.py: Generate datasets for machine learning.
+generator.py: Generate datasets for machine learning using Ray for distributed processing.
 """
 
 from config import constants
@@ -10,16 +10,17 @@ from mahjong_reviewer.simulation import simulator
 from mahjong_reviewer.utils import file_util
 import torch
 from typing import List
-from multiprocessing import Pool, cpu_count
 import logging
+import ray
 
 logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
 logger = logging.getLogger(__name__)
 
 
+@ray.remote
 def process_single_game(log_path: Path) -> tuple[torch.Tensor, List[int]]:
     """
-    Process a single game log file.
+    Process a single game log file (Ray remote function).
 
     Args:
         log_path: The path to a game log.
@@ -38,25 +39,25 @@ def process_single_game(log_path: Path) -> tuple[torch.Tensor, List[int]]:
         return torch.zeros(0, constants.TILE_TYPES), []
 
 
-def generate_dataset(logs: List[Path], dataset_name: str, num_workers: int = -1) -> None:
+def generate_dataset(logs: List[Path], dataset_name: str) -> None:
     """
     Generate a dataset from a collection of game logs.
 
     Args:
         logs: The paths to games which will be simulated for data generation.
         dataset_name: The desired name for the generated dataset.
-        num_workers: The number of parallel workers.
     """
-    if num_workers == -1:
-        num_workers = max(1, cpu_count() - 1)
-    logger.info(f"Processing {len(logs)} games using {num_workers} workers...")
-
-    with Pool(num_workers) as pool:
-        results = []
-        for i, result in enumerate(pool.imap_unordered(process_single_game, logs)):
-            results.append(result)
-            total_states = sum(len(r[1]) for r in results)
-            logger.info(f"Processed {i+1}/{len(logs)} games ({total_states} states)")
+    logger.info(f"Processing {len(logs)}...")
+    futures = [process_single_game.remote(log) for log in logs]
+    
+    # Process results as they complete
+    results = []
+    while futures:
+        ready, futures = ray.wait(futures, num_returns=1)
+        result = ray.get(ready[0])
+        results.append(result)
+        total_states = sum(len(r[1]) for r in results)
+        logger.info(f"Processed {len(results)}/{len(logs)} games ({total_states} states)")
 
     logger.info("Combining results...")
     all_predictors = []
@@ -80,7 +81,9 @@ def generate_dataset(logs: List[Path], dataset_name: str, num_workers: int = -1)
     logger.info(f"Saved dataset with {len(all_responses)} states to {output_path}")
 
 
-if __name__ == "__main__":
+if __name__ == "__main__": 
+    ray.init(ignore_reinit_error=True)
+    
     config = Config()
     data_dir = config.DATA_DIR / "raw"
     logger.info("Finding log files...")
@@ -101,7 +104,6 @@ if __name__ == "__main__":
             generate_dataset(
                 sample_logs[split_idxs[i] : split_idxs[i + 1]],
                 f"cnn_train{i}.pt",
-                config.NUM_WORKERS,
             )
         for i in range(num_test_datasets):
             logger.info(f"Generating test dataset {i}...")
@@ -109,14 +111,14 @@ if __name__ == "__main__":
             generate_dataset(
                 sample_logs[split_idxs[j] : split_idxs[j + 1]],
                 f"cnn_test{i}.pt",
-                config.NUM_WORKERS,
             )
 
     else:
         split_idx = round(config.SAMPLE_SIZE * config.TRAIN_TEST_SPLIT)
         logger.info("Generating training dataset...")
-        generate_dataset(sample_logs[:split_idx], "cnn_train.pt", config.NUM_WORKERS)
+        generate_dataset(sample_logs[:split_idx], "cnn_train.pt")
         logger.info("Generating test dataset...")
-        generate_dataset(sample_logs[split_idx:], "cnn_test.pt", config.NUM_WORKERS)
+        generate_dataset(sample_logs[split_idx:], "cnn_test.pt")
 
     logger.info("Data generation complete!")
+    ray.shutdown()

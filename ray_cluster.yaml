@@ -1,0 +1,57 @@
+cluster_name: mahjong-data-cluster
+
+max_workers: 4
+
+docker: {}
+
+provider:
+    type: aws
+    region: us-east-1
+    availability_zone: us-east-1a
+
+auth:
+    ssh_user: ubuntu
+
+available_node_types:
+    ray_head_default:
+        node_config:
+            InstanceType: c5.2xlarge
+            ImageId: ami-0071174ad8cbb9e17
+            BlockDeviceMappings:
+                - DeviceName: /dev/sda1
+                  Ebs:
+                      VolumeSize: 30
+                      VolumeType: gp3
+        resources: {}
+        min_workers: 0
+        max_workers: 0
+    
+    ray_worker_default:
+        node_config:
+            InstanceType: c5.4xlarge
+            ImageId: ami-0071174ad8cbb9e17
+            BlockDeviceMappings:
+                - DeviceName: /dev/sda1
+                  Ebs:
+                      VolumeSize: 30
+                      VolumeType: gp3
+        resources: {}
+        min_workers: 0
+        max_workers: 4
+
+head_node_type: ray_head_default
+
+file_mounts:
+    /home/ubuntu/mahjong-reviewer: ./
+
+setup_commands:
+    - sudo apt-get update
+    - sudo DEBIAN_FRONTEND=noninteractive apt-get install -y python3-pip python3-venv
+    - pip3 install --upgrade pip --break-system-packages
+    - pip3 install ray[default] --break-system-packages
+    - pip3 install torch torchvision --index-url https://download.pytorch.org/whl/cpu --break-system-packages
+    - pip3 install dominate jsonlines mahjong pillow --break-system-packages
+    - pip3 install 'boto3>=1.4.8' --break-system-packages
+
+head_setup_commands:
+    - pip3 install 'boto3>=1.4.8' --break-system-packages
